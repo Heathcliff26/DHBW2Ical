@@ -24,4 +24,11 @@
       </plugin>
     </plugins>
   </build>
+  <dependencies>
+  	<dependency>
+  		<groupId>ical4j</groupId>
+  		<artifactId>ical4j</artifactId>
+  		<version>0.9.20</version>
+  	</dependency>
+  </dependencies>
 </project>
