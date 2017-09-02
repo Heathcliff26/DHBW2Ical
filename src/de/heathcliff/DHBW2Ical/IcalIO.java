@@ -108,6 +108,7 @@ public class IcalIO {
 		output.setValidating(true);
 		output.output(newCalendar, icalOut);
 		icalOut.close();
+		this.parsedIcal = parsedIcal;
 	}
 	
 	private DateTime getDateTime(Component component, String propName) throws Exception {
