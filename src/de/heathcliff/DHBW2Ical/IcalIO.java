@@ -47,12 +47,17 @@ public class IcalIO {
 		this.id = id;
 		this.tempDirPath = path + "/cache/";
 		
+		// check if tempDir exists
+		File tmpDir = new File(getTempDirPath());
+		if (!tmpDir.exists()) {
+			tmpDir.mkdir();
+		}
+		
 		// load file
 		File parsedIcal = new File(tempDirPath + "vorlesungsplan_" + id + ".ics");
 		if (parsedIcal.exists() && (((new Date().getTime()) - parsedIcal.lastModified()) < ((long) (refreshRate * 60 * 1000)))) {
 			this.parsedIcal = parsedIcal;
 		} else {
-			System.out.println("Parse ICAL");
 			parseIcal(getDHBWIcal());
 		}
 	}
@@ -69,7 +74,6 @@ public class IcalIO {
 		
 		// get timezone
 		this.timezone = TimeZoneRegistryFactory.getInstance().createRegistry().getTimeZone("Europe/Berlin");
-		System.out.println(timezone.getID());
 		
 		// create new fixed calendar
 		Calendar newCalendar = new Calendar();

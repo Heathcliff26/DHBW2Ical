@@ -37,8 +37,12 @@ public class SIcal extends HttpServlet {
 		if (id != null) {
 			// get ical file
 			try {
-				IcalIO icalIO = new IcalIO(id, request.getContextPath());
+				IcalIO icalIO = new IcalIO(id, getServletContext().getRealPath("/"));
 				File icalFile = icalIO.getParsedIcal();
+				
+				// prepare file transfer
+				response.setContentType("application/octet-stream");
+				response.setHeader("Content-disposition","attachment; filename=vorlesungsplan.ics");
 				
 				// send ical to client
 				OutputStream out = response.getOutputStream();
@@ -56,10 +60,8 @@ public class SIcal extends HttpServlet {
 			}
 			
 			
-		} else {
-			response.sendRedirect("/");
 		}
-		
+		response.sendRedirect("/");
 	}
 
 	/**

@@ -10,6 +10,6 @@
   </servlet>
   <servlet-mapping>
     <servlet-name>Ical</servlet-name>
-    <url-pattern>/Ical</url-pattern>
+    <url-pattern>/ical</url-pattern>
   </servlet-mapping>
 </web-app>
