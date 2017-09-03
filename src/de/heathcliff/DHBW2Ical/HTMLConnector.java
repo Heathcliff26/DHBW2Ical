@@ -21,7 +21,7 @@ public class HTMLConnector {
 		}
 		Elements selects = doc.select("select");
 		if (selects.size() == 1) {
-			return selects.first().text();
+			return selects.first().outerHtml();
 		} else {
 			log.error("Could not load lessons, got " + selects.size() + " selects");
 			return "Error on loading lessons";

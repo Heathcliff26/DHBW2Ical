@@ -61,7 +61,7 @@ public class SIcal extends HttpServlet {
 			
 			
 		}
-		response.sendRedirect("/");
+		response.sendRedirect("/DHBW2Ical");
 	}
 
 	/**
