@@ -113,7 +113,7 @@ public class IcalIO {
 	
 	private DateTime getDateTime(Component component, String propName) throws Exception {
 		DateTime dt = new DateTime(component.getProperty(propName).getValue());
-		dt.setTimeZone(timezone);
+		dt.setUtc(true);
 		return dt;
 	}
 	

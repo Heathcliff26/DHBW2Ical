@@ -2,7 +2,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>de.heathcliff</groupId>
-	<artifactId>DHBW-ical2ical</artifactId>
+	<artifactId>DHBW2Ical</artifactId>
 	<version>1.0.0</version>
 	<packaging>war</packaging>
 	<build>
@@ -41,6 +41,11 @@
 			<groupId>javax.servlet</groupId>
 			<artifactId>javax.servlet-api</artifactId>
 			<version>3.1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.jsoup</groupId>
+			<artifactId>jsoup</artifactId>
+			<version>1.10.3</version>
 		</dependency>
 	</dependencies>
 </project>
