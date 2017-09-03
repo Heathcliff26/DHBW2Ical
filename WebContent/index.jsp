@@ -11,7 +11,7 @@
 	function call_ics() {
 		var e = document.getElementById("class_select").selectedIndex;
 		var url = document.getElementById("class_select").options[e].value;
-		window.location.assign("ical?uid=" + url);
+		window.location.assign("http://heathcliff.eu/DHBW2Ical/ical?uid=" + url);
 	}
 
 	//Used to display the URL of the downloadable ICAL file after selecting a course
