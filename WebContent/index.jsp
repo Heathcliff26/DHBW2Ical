@@ -24,7 +24,7 @@
 </script>
 </head>
 <body>
-	<div style="width: 800px; margin: 0 auto; display: inline-block">
+	<div style="width: 200px; margin: 0 auto;">
 		<form>
 			<%=HTMLConnector.getSelect() %>
 			<br />
