@@ -31,7 +31,7 @@
 		<%=HTMLConnector.getSelect()%>
 		<br /> <input style="text-align: center; width: 500px" align="center"
 			type="text" id="input_id" disabled="true" name="urlbox"> <br />
-		<button onClick="call_ics()">Download</button>
+		<button type="button" onClick="call_ics()">Download</button>
 	</form>
 </body>
 </html>
