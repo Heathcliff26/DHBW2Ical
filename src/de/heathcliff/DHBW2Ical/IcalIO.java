@@ -29,6 +29,7 @@ import net.fortuna.ical4j.model.property.Description;
 import net.fortuna.ical4j.model.property.DtEnd;
 import net.fortuna.ical4j.model.property.Location;
 import net.fortuna.ical4j.model.property.ProdId;
+import net.fortuna.ical4j.model.property.Summary;
 import net.fortuna.ical4j.model.property.Uid;
 import net.fortuna.ical4j.model.property.Version;
 import net.fortuna.ical4j.model.property.DtStamp;
@@ -124,7 +125,7 @@ public class IcalIO {
 				PropertyList propList = new PropertyList();
 				propList.add(new DtStart(dtstart));
 				propList.add(new DtEnd(dtend));
-				propList.add(new Description(description));
+				propList.add(new Summary(description));
 				propList.add(new DtStamp(dtstamp));
 				propList.add(new Uid(uidValue));
 				propList.add(new Location(component.getProperty("LOCATION").getValue()));
