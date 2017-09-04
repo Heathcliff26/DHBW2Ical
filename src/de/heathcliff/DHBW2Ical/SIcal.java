@@ -33,11 +33,17 @@ public class SIcal extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// get Parameters
 		String id = request.getParameter("uid");
+		String alarm = request.getParameter("alarm");
+		
+		log.debug("Got request");
+		
 		if (id != null) {
 			// get ical file
 			try {
-				IcalIO icalIO = new IcalIO(id, getServletContext().getRealPath("/"));
+				boolean useAlarm = (alarm != null);
+				IcalIO icalIO = new IcalIO(id, getServletContext().getRealPath("/"), useAlarm);
 				File icalFile = icalIO.getParsedIcal();
 				
 				// prepare file transfer

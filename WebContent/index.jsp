@@ -9,18 +9,25 @@
 <link rel="shortcut icon" type="image/x-icon" href="/DHBW2Ical/res/favicon.ico">
 <title>DHBW2Ical</title>
 <script type="text/javascript">
-	//Redirect to correct download direction
-	function call_ics() {
+
+	// form URL String
+	function getURLString() {
 		id = document.getElementById("class_select").value;
 		url_string = "http://heathcliff.eu/DHBW2Ical/ical?uid=" + id;
-		window.location.assign(url_string);
+		if (document.getElementById("alarm_check").checked) {
+			url_string = url_string + "&alarm=true";
+		}
+		return url_string;
+	}
+	
+	//Redirect to correct download direction
+	function call_ics() {
+		window.location.assign(getURLString());
 	}
 
 	//Used to display the URL of the downloadable ICAL file after selecting a course
 	function displayURL() {
-		id = document.getElementById("class_select").value;
-		url_string = "http://heathcliff.eu/DHBW2Ical/ical?uid=" + id;
-		document.getElementById("input_id").value = url_string;
+		document.getElementById("input_id").value = getURLString();
 	}
 </script>
 </head>
@@ -29,8 +36,12 @@
 	<p>Wählen sie einen Kurs aus und holen sie sich das Ical-File</p>
 	<form>
 		<%=HTMLConnector.getSelect()%>
-		<br /> <input style="text-align: center; width: 500px" align="center"
-			type="text" id="input_id" disabled="true" name="urlbox"> <br />
+		<br /><br />
+		<input style="text-align: center; width: 500px" align="center"
+			type="text" id="input_id" disabled="true" name="urlbox"><br />
+		<br />
+		<label><input type="checkbox" id="alarm_check" name="alarm" onchange="displayURL()">Mit Alarmen</label><br />
+		<br />
 		<button type="button" onClick="call_ics()">Download</button>
 	</form>
 </body>

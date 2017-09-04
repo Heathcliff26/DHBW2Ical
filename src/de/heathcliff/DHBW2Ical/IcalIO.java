@@ -10,6 +10,8 @@ import java.util.Iterator;
 import java.util.Properties;
 import java.util.UUID;
 
+import org.apache.log4j.Logger;
+
 import net.fortuna.ical4j.data.CalendarBuilder;
 import net.fortuna.ical4j.data.CalendarOutputter;
 import net.fortuna.ical4j.model.Calendar;
@@ -19,24 +21,29 @@ import net.fortuna.ical4j.model.TimeZone;
 import net.fortuna.ical4j.model.TimeZoneRegistryFactory;
 import net.fortuna.ical4j.model.component.VEvent;
 import net.fortuna.ical4j.model.component.VTimeZone;
+import net.fortuna.ical4j.model.component.VAlarm;
 import net.fortuna.ical4j.model.property.CalScale;
 import net.fortuna.ical4j.model.property.Location;
 import net.fortuna.ical4j.model.property.ProdId;
 import net.fortuna.ical4j.model.property.Uid;
 import net.fortuna.ical4j.model.property.Version;
+import net.fortuna.ical4j.model.property.DtStamp;;
 
 public class IcalIO {
+	
+	private Logger log = Logger.getLogger(getClass());
 	
 	private int refreshRate;
 	
 	private String id;
 	private String tempDirPath;
+	private boolean useAlarm;
 	
 	private File parsedIcal;
 	
 	private TimeZone timezone;
 
-	public IcalIO(String id, String path) throws Exception {
+	public IcalIO(String id, String path, boolean useAlarm) throws Exception {
 		// read db.properties
 		Properties prop = new Properties();
 		InputStream inpStream = new FileInputStream(path + "WEB-INF/classes/dhbw-ical2ical.properties");
@@ -46,6 +53,12 @@ public class IcalIO {
 		// initialize values
 		this.id = id;
 		this.tempDirPath = path + "/cache/";
+		this.useAlarm = useAlarm;
+		
+		// log values for debug
+		log.debug("ID: " + this.id);
+		log.debug("Cache: " + this.tempDirPath);
+		log.debug("Use alarm: " + this.useAlarm);
 		
 		// check if tempDir exists
 		File tmpDir = new File(getTempDirPath());
@@ -54,10 +67,15 @@ public class IcalIO {
 		}
 		
 		// load file
-		File parsedIcal = new File(tempDirPath + "vorlesungsplan_" + id + ".ics");
-		if (parsedIcal.exists() && (((new Date().getTime()) - parsedIcal.lastModified()) < ((long) (refreshRate * 60 * 1000)))) {
-			this.parsedIcal = parsedIcal;
+		if (this.useAlarm) {
+			this.parsedIcal = new File(tempDirPath + "vorlesungsplan_" + id + "_alarm.ics");
 		} else {
+			this.parsedIcal = new File(tempDirPath + "vorlesungsplan_" + id + ".ics");
+		}
+		if (parsedIcal.exists() && (((new Date().getTime()) - parsedIcal.lastModified()) < ((long) (refreshRate * 60 * 1000)))) {
+			log.debug("Use old File");
+		} else {
+			log.debug("parse ical");
 			parseIcal(getDHBWIcal());
 		}
 	}
@@ -91,24 +109,40 @@ public class IcalIO {
 				// get times
 				DateTime dtstart = getDateTime(component, "DTSTART");
 				DateTime dtend = getDateTime(component, "DTEND");
+				DateTime dtstamp = getDateTime(component, "DTSTAMP");
 				
 				// create new event in new calendar
 				VEvent event = new VEvent(dtstart, dtend, component.getProperty("SUMMARY").getValue());
 				String uidValue = UUID.randomUUID() + "@group-e.dhbw-mannheim.de";
+				event.getProperties().add(new DtStamp(dtstamp));
 				event.getProperties().add(new Uid(uidValue));
 				event.getProperties().add(new Location(component.getProperty("LOCATION").getValue()));
+				if (useAlarm) {
+					// get alarm time
+					java.util.Calendar cal = java.util.Calendar.getInstance();
+					cal.setTime(dtstart);
+					cal.add(java.util.Calendar.DAY_OF_MONTH, -1);
+					cal.set(java.util.Calendar.HOUR_OF_DAY, 20);
+					cal.set(java.util.Calendar.MINUTE, 0);
+					DateTime dtreminder = new DateTime(cal.getTime());
+					
+					// create alarm
+					VAlarm alarm = new VAlarm(dtreminder);
+					
+					// add alarm to event
+					event.getAlarms().add(alarm);
+				}
+				// add event to calendar
 				newCalendar.getComponents().add(event);
 			}
 		}
 		
 		// write calendar
-		File parsedIcal = new File(tempDirPath + "vorlesungsplan_" + id + ".ics");
 		FileOutputStream icalOut = new FileOutputStream(parsedIcal);
 		CalendarOutputter output = new CalendarOutputter();
 		output.setValidating(true);
 		output.output(newCalendar, icalOut);
 		icalOut.close();
-		this.parsedIcal = parsedIcal;
 	}
 	
 	private DateTime getDateTime(Component component, String propName) throws Exception {
@@ -131,6 +165,10 @@ public class IcalIO {
 	
 	public File getParsedIcal() {
 		return this.parsedIcal;
+	}
+	
+	public boolean usesAlarm() {
+		return this.useAlarm;
 	}
 
 }
