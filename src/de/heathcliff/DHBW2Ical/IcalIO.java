@@ -17,6 +17,7 @@ import net.fortuna.ical4j.data.CalendarOutputter;
 import net.fortuna.ical4j.model.Calendar;
 import net.fortuna.ical4j.model.Component;
 import net.fortuna.ical4j.model.DateTime;
+import net.fortuna.ical4j.model.PropertyList;
 import net.fortuna.ical4j.model.TimeZone;
 import net.fortuna.ical4j.model.TimeZoneRegistryFactory;
 import net.fortuna.ical4j.model.component.VEvent;
@@ -25,11 +26,13 @@ import net.fortuna.ical4j.model.component.VAlarm;
 import net.fortuna.ical4j.model.property.Action;
 import net.fortuna.ical4j.model.property.CalScale;
 import net.fortuna.ical4j.model.property.Description;
+import net.fortuna.ical4j.model.property.DtEnd;
 import net.fortuna.ical4j.model.property.Location;
 import net.fortuna.ical4j.model.property.ProdId;
 import net.fortuna.ical4j.model.property.Uid;
 import net.fortuna.ical4j.model.property.Version;
-import net.fortuna.ical4j.model.property.DtStamp;;
+import net.fortuna.ical4j.model.property.DtStamp;
+import net.fortuna.ical4j.model.property.DtStart;;
 
 public class IcalIO {
 	
@@ -118,10 +121,14 @@ public class IcalIO {
 				String uidValue = UUID.randomUUID() + "@group-e.dhbw-mannheim.de";
 				
 				// create new event in new calendar
-				VEvent event = new VEvent(dtstart, dtend, description);
-				event.getProperties().add(new DtStamp(dtstamp));
-				event.getProperties().add(new Uid(uidValue));
-				event.getProperties().add(new Location(component.getProperty("LOCATION").getValue()));
+				PropertyList propList = new PropertyList();
+				propList.add(new DtStart(dtstart));
+				propList.add(new DtEnd(dtend));
+				propList.add(new Description(description));
+				propList.add(new DtStamp(dtstamp));
+				propList.add(new Uid(uidValue));
+				propList.add(new Location(component.getProperty("LOCATION").getValue()));
+				VEvent event = new VEvent(propList);
 				if (useAlarm) {
 					// get alarm time
 					java.util.Calendar cal = java.util.Calendar.getInstance();
