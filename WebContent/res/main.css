@@ -1,0 +1,39 @@
+body {
+	text-align: center;
+	padding: 10px;
+	font-family: Arial;
+}
+
+form {
+	background-color: lightgrey;
+	border: 2px solid;
+	padding: 10px 20px;
+	width: 50%;
+	margin: 0px 25%;
+}
+
+table {
+   border: 1px solid black;
+   margin: 5px 25%;
+   width: 50%;
+}
+
+th, td {
+	border: 1px solid black;
+	margin: 1px;
+	padding: 4px;
+}
+
+a {
+	padding: 2px 6px;
+	background-color: grey;
+	text-decoration: none;
+	color: white;
+}
+a:hover {
+	color: darkblue;
+}
+
+img {
+	border: 1px solid black;
+}
