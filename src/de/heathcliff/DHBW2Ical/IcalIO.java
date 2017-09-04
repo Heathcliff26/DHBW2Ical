@@ -22,7 +22,9 @@ import net.fortuna.ical4j.model.TimeZoneRegistryFactory;
 import net.fortuna.ical4j.model.component.VEvent;
 import net.fortuna.ical4j.model.component.VTimeZone;
 import net.fortuna.ical4j.model.component.VAlarm;
+import net.fortuna.ical4j.model.property.Action;
 import net.fortuna.ical4j.model.property.CalScale;
+import net.fortuna.ical4j.model.property.Description;
 import net.fortuna.ical4j.model.property.Location;
 import net.fortuna.ical4j.model.property.ProdId;
 import net.fortuna.ical4j.model.property.Uid;
@@ -132,8 +134,8 @@ public class IcalIO {
 					// create alarm
 					VAlarm alarm = new VAlarm(dtreminder);
 					// add description
-					alarm.getAction().setValue("DISPLAY");
-					alarm.getDescription().setValue(description);
+					alarm.getProperties().add(new Action("DISPLAY"));
+					alarm.getProperties().add(new Description(description));
 					
 					// validate alarm
 					alarm.validate();
