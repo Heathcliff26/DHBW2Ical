@@ -111,9 +111,12 @@ public class IcalIO {
 				DateTime dtend = getDateTime(component, "DTEND");
 				DateTime dtstamp = getDateTime(component, "DTSTAMP");
 				
-				// create new event in new calendar
-				VEvent event = new VEvent(dtstart, dtend, component.getProperty("SUMMARY").getValue());
+				// get other values
+				String description = component.getProperty("SUMMARY").getValue();
 				String uidValue = UUID.randomUUID() + "@group-e.dhbw-mannheim.de";
+				
+				// create new event in new calendar
+				VEvent event = new VEvent(dtstart, dtend, description);
 				event.getProperties().add(new DtStamp(dtstamp));
 				event.getProperties().add(new Uid(uidValue));
 				event.getProperties().add(new Location(component.getProperty("LOCATION").getValue()));
@@ -128,7 +131,12 @@ public class IcalIO {
 					
 					// create alarm
 					VAlarm alarm = new VAlarm(dtreminder);
+					// add description
+					alarm.getAction().setValue("DISPLAY");
+					alarm.getDescription().setValue(description);
 					
+					// validate alarm
+					alarm.validate();
 					// add alarm to event
 					event.getAlarms().add(alarm);
 				}
