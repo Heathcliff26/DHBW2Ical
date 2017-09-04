@@ -132,6 +132,9 @@ public class IcalIO {
 					// add alarm to event
 					event.getAlarms().add(alarm);
 				}
+				// validate event
+				event.validate();
+				
 				// add event to calendar
 				newCalendar.getComponents().add(event);
 			}

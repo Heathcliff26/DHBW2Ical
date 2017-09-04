@@ -64,10 +64,9 @@ public class SIcal extends HttpServlet {
 				log.error("Could not load ical", e);
 				response.sendError(500);
 			}
-			
-			
+		} else {
+			response.sendRedirect("/DHBW2Ical");
 		}
-		response.sendRedirect("/DHBW2Ical");
 	}
 
 	/**
