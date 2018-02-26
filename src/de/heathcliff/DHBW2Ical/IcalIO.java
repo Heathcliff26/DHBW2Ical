@@ -5,6 +5,9 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.Properties;
@@ -49,6 +52,8 @@ public class IcalIO {
 	private String tempDirPath;
 	private boolean useAlarm;
 
+	private String originalIcalPath;
+	private File originalIcal;
 	private File parsedIcal;
 
 	private TimeZone timezone;
@@ -81,6 +86,10 @@ public class IcalIO {
 		if (!tmpDir.exists()) {
 			tmpDir.mkdir();
 		}
+		
+		// initialize File Variable
+		this.originalIcalPath = tempDirPath + "vorlesungsplan_" + id + "_origianl.ics";
+		this.originalIcal = new File(this.originalIcalPath);
 
 		// load file
 		if (this.useAlarm) {
@@ -105,7 +114,10 @@ public class IcalIO {
 	}
 
 	private InputStream getDHBWIcal() throws Exception {
-		return new URL(getCalendarUrl()).openStream();
+		URL url = new URL(getCalendarUrl());
+		InputStream in = url.openStream();
+		Files.copy(in, Paths.get(originalIcalPath), StandardCopyOption.REPLACE_EXISTING);
+		return new FileInputStream(originalIcal);
 	}
 
 	private void parseIcal(InputStream input) throws ICALException {
