@@ -5,7 +5,7 @@ import java.io.IOException;
 import org.apache.log4j.Logger;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.select.Elements;
+import org.jsoup.nodes.Element;
 
 public class HTMLConnector {
 	
@@ -19,11 +19,11 @@ public class HTMLConnector {
 			log.error("Could not load lessons", e);
 			return "Error on loading lessons";
 		}
-		Elements selects = doc.select("select");
-		if (selects.size() == 1) {
-			return selects.first().outerHtml();
+		Element select = doc.getElementById("class_select");
+		if (select != null) {
+			return select.html();
 		} else {
-			log.error("Could not load lessons, got " + selects.size() + " selects");
+			log.error("Could not load lessons");
 			return "Error on loading lessons";
 		}
 	}

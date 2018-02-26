@@ -35,7 +35,9 @@
 	<h1>Herzlich Willkommen</h1>
 	<p>Wählen sie einen Kurs aus und holen sie sich das Ical-File</p>
 	<form>
-		<%=HTMLConnector.getSelect()%>
+		<select  onChange="displayURL()" id="class_select" name="Kurse" size="1" >
+			<%=HTMLConnector.getSelect()%>
+		</select>
 		<br /><br />
 		<input style="text-align: center; width: 500px" align="center"
 			type="text" id="input_id" disabled="true" name="urlbox"><br />

@@ -60,8 +60,11 @@ public class SIcal extends HttpServlet {
 				}
 				in.close();
 				out.flush();
+			} catch (ICALException e) {
+				response.sendError(500);
+				return;
 			} catch (Exception e) {
-				log.error("Could not load ical", e);
+				log.error("Unknown Error while loading ICAL", e);
 				response.sendError(500);
 			}
 		} else {
