@@ -40,6 +40,9 @@ public class IcalIO {
 
 	private Logger log = Logger.getLogger(getClass());
 
+	private static String BASEURL = "http://vorlesungsplan.dhbw-mannheim.de/ical.php?uid=";
+	private String CalendarUrl;
+
 	private int refreshRate;
 
 	private String id;
@@ -66,6 +69,7 @@ public class IcalIO {
 		this.id = id;
 		this.tempDirPath = path + "/cache/";
 		this.useAlarm = useAlarm;
+		this.CalendarUrl = BASEURL + this.getId();
 
 		// log values for debug
 		log.debug("ID: " + this.id);
@@ -101,7 +105,7 @@ public class IcalIO {
 	}
 
 	private InputStream getDHBWIcal() throws Exception {
-		return new URL("http://vorlesungsplan.dhbw-mannheim.de/ical.php?uid=" + getId()).openStream();
+		return new URL(getCalendarUrl()).openStream();
 	}
 
 	private void parseIcal(InputStream input) throws ICALException {
@@ -112,7 +116,7 @@ public class IcalIO {
 			dhbwCalendar = builder.build(input);
 			input.close();
 		} catch (Exception e) {
-			log.error("Could not read Calendar", e);
+			log.error("Could not read Calendar, URL: " + getCalendarUrl(), e);
 			throw new ICALException("Could not read Calendar");
 		}
 
@@ -212,6 +216,10 @@ public class IcalIO {
 
 	public String getTempDirPath() {
 		return this.tempDirPath;
+	}
+
+	public String getCalendarUrl() {
+		return this.CalendarUrl;
 	}
 
 	public String getId() {
