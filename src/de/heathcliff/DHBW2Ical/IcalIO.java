@@ -43,7 +43,7 @@ public class IcalIO {
 
 	private Logger log = Logger.getLogger(getClass());
 
-	private static String BASEURL = "http://vorlesungsplan.dhbw-mannheim.de/ical.php?uid=";
+	private static String BASEURL = "https://vorlesungsplan.dhbw-mannheim.de/ical.php?uid=";
 	private String CalendarUrl;
 
 	private int refreshRate;
